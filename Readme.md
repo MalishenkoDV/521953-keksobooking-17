@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Dmytro Malishenko](https://up.htmlacademy.ru/javascript/17/user/521953).
-* Наставник: `Неизвестно`.
+* Наставник: [Anton Popov](https://htmlacademy.ru/profile/joker).
 
 ---
 
