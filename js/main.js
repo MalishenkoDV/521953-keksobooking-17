@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /* Первое задание в ветке модуль3-задание1*/
 var NO_OF_PINS = 8;
@@ -9,12 +9,19 @@ var NO_OF_PINS = 8;
   }
 }; */
 
-var Offer = {
-  PALACE:'Дворец',
-  FLAT:'Квартирка',
-  HOUSE:'Хата',
-  BUNGALO:'Сарайчик'
+var Types = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартирка',
+  HOUSE: 'Хата',
+  BUNGALO: 'Сарайчик'
 };
+/*
+var Offer = [
+  'PALACE',
+  'FLAT',
+  'HOUSE',
+  'BUNGALO'
+];*/
 
 var Location = {
   X_MIN: 0,
@@ -23,6 +30,12 @@ var Location = {
   Y_MAX: 630
 };
 
+/**
+ * Функция по произвольной выборке числа из массива
+ * @param {number} min - указывает начало диапазона
+ * @param {number} max - указывает конец диапазона
+ * @return {*} - переводит диапазон в начальную и конечную точки и возвращает произвольный результат.
+ */
 var getRandomFromInterval = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -35,38 +48,28 @@ var getRandomFromInterval = function (min, max) {
 var getRandomElementFromArray = function (arr) {
   return arr[getRandomFromInterval(0, arr.length - 1)];
 };
-/* Создайте массив, состоящий из 8 сгенерированных JS объектов, которые будут описывать похожие объявления неподалёку. Структура объектов должна быть следующей:
-
-{
-  "author": {
-    "avatar": строка, адрес изображения вида img/avatars/user{{xx}}.png, где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
-    ? Как передать результат работы в объект PIN_DATAS.avatar
-  },
-  "offer": {
-    "type": строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo
-  },
-
-  "location": {
-    "x": случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
-    "y": случайное число, координата y метки на карте от 130 до 630.
-    ? создвать масив из диапазона координат, или переменные   присваиать каждому отдельно
-  }
-}*/
 
 /**
- * Созданик объекта
- * @param {str} name - свойство "Волшебника" - полное имя, сложенное из массива имен и фамилий
- * @param {str} coatColor - свойство "Волшебника" - цвет курточки
- * @param {str} eyes - свойство "Волшебника" - цвет глаз
- * @return {Object} wizardObject - готовый объект "Волшебник"
+ * Генерация свойств для "Флажка" (createPin)
+ * @param {number} NO_OF_PINS - берем число из переменной, и на его основе запускаем счетчик
+ * @param {string} avatar - маленькое фото профиля автора объявления
+ * @param {Object} offer - рента чего-то
+ * @param {Object} location - диапазон координат "пометки" по осям X и Y
+ * @return {Array} pinObject - готовые данные для объекта "Флажок"
  */
-var createPin = function (NO_OF_PINS) {
+var createPin = function () {
   var pinObject = {
-    avatar: 'img/avatars/user0' + i + '.png',
-    offer: getRandomElementFromArray(Offer),
+    author: {
+      avatar: 'img/avatars/user0' + i + '.png'
+    },
+
+    offer: {
+      type: getRandomElementFromArray(Object.values(Types))
+    },
+
     location: {
-      x:getRandomFromInterval(Location.X_MIN, Location.X_MAX),
-      y:getRandomFromInterval(Location.Y_MIN, Location.Y_MAX)
+      x: getRandomFromInterval(Location.X_MIN, Location.X_MAX),
+      y: getRandomFromInterval(Location.Y_MIN, Location.Y_MAX)
     }
   };
   return pinObject;
@@ -82,19 +85,58 @@ for (var i = 1; i < NO_OF_PINS; i++) {
   pinObjects[i] = createPin();
 }
 
-/**
- * Случайное значение из массива.
- * @param {Array} arr - произвольный масив
- * @return {*} - элемент масива
- */
-var getRandomElementFromArray = function (arr) {
-  return arr[getRandomFromInterval(0, arr.length - 1)];
-}
-
-/* второе задание в ветке модуль3-задание1*/
+/* --- второе задание в ветке модуль3-задание1 --- */
 var userDialog = document.querySelector('.map');
 userDialog.classList.remove('map--faded');
 
-/* Третье задание в ветке модуль3-задание1*/
+/* --- Третье задание в ветке модуль3-задание1 --- */
+
+
+/**
+ * Показываем окно с параметрами мага
+ */
+
+/**
+ * Поиск в темплейтах по ид
+ * эллемента с нужным классом
+ */
+var similarPinTemplate = document.querySelector('#pin')
+    .content
+    .querySelector('.map__pin');
+
+/**
+ * Клонирование волшебников
+ * @param {object} pinObject -- обьект данных волшебника
+ * @return {object} pinElement
+ */
+var renderPin = function (pinObject) {
+  var pinElement = similarPinTemplate.cloneNode(true);
+
+  pinElement.querySelector('img').src = pinObject.author.avatar;
+  pinElement.querySelector('img').alt = pinObject.offer.type;
+  pinElement.querySelector('.map__pin').style = 'left:' + pinObject.location.x + 'px;top' +
+  pinObject.location.y + 'px';
+
+  return pinElement;
+};
+
+var similarListElement = userDialog.querySelector('.map__pins');
+similarListElement.appendChild(createDocumentFragment(fragment));
+
+/**
+ * Процесс клонирования волшебников
+ */
+var fragment = document.createDocumentFragment();
+for (var j = 0; j < pinObjects.length; j++) {
+  fragment.appendChild(renderPin(pinObjects[i]));
+}
+similarListElement.appendChild(fragment);
+/*
+var fragment = document.createDocumentFragment();
+pinObjects.forEach(function (pin) {
+  fragment.appendChild(renderPin(pin));
+});*/
+/*
+*/
 
 /* Четвертое задание в ветке модуль3-задание1*/
