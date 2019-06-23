@@ -3,27 +3,9 @@
 /* Первое задание в ветке модуль3-задание1*/
 var NO_OF_PINS = 8;
 
-/* var Avatars = function () {
-  for (var i = 1; i < NO_OF_PINS + 1; i++) {
-    avtar: 'img/avatars/user0' + i + '.png';
-  }
-}; */
+var TYPES = ['place', 'flat', 'house', 'bungalo'];
 
-var Types = {
-  PALACE: 'Дворец',
-  FLAT: 'Квартирка',
-  HOUSE: 'Хата',
-  BUNGALO: 'Сарайчик'
-};
-/*
-var Offer = [
-  'PALACE',
-  'FLAT',
-  'HOUSE',
-  'BUNGALO'
-];*/
-
-var Location = {
+var Coords = {
   X_MIN: 0,
   X_MAX: 1200,
   Y_MIN: 130,
@@ -31,7 +13,7 @@ var Location = {
 };
 
 /**
- * Функция по произвольной выборке числа из массива
+ * Функция по произвольной выборке числа из интервала
  * @param {number} min - указывает начало диапазона
  * @param {number} max - указывает конец диапазона
  * @return {*} - переводит диапазон в начальную и конечную точки и возвращает произвольный результат.
@@ -50,93 +32,59 @@ var getRandomElementFromArray = function (arr) {
 };
 
 /**
- * Генерация свойств для "Флажка" (createPin)
- * @param {number} NO_OF_PINS - берем число из переменной, и на его основе запускаем счетчик
+ * Генерация свойств для "Флажка" (createOffer)
+ * @param {number} i - берем число из переменной, и на его основе запускаем счетчик
  * @param {string} avatar - маленькое фото профиля автора объявления
  * @param {Object} offer - рента чего-то
- * @param {Object} location - диапазон координат "пометки" по осям X и Y
+ * @param {Object} Location - диапазон координат "пометки" по осям X и Y
  * @return {Array} pinObject - готовые данные для объекта "Флажок"
  */
-var createPin = function () {
-  var pinObject = {
+var createOffer = function () {
+  var offerCard = {
     author: {
       avatar: 'img/avatars/user0' + i + '.png'
     },
 
     offer: {
-      type: getRandomElementFromArray(Object.values(Types))
+      type: getRandomElementFromArray(TYPES)
     },
 
     location: {
-      x: getRandomFromInterval(Location.X_MIN, Location.X_MAX),
-      y: getRandomFromInterval(Location.Y_MIN, Location.Y_MAX)
+      x: getRandomFromInterval(Coords.X_MIN, Coords.X_MAX),
+      y: getRandomFromInterval(Coords.Y_MIN, Coords.Y_MAX)
     }
   };
-  return pinObject;
+  return offerCard;
 };
-/*
-var randomProperty = function (obj) {
-    var keys = Object.keys(obj)
-    return obj[keys[ keys.length * Math.random() << 0]];
-*/
-var pinObjects = [];
 
-for (var i = 1; i < NO_OF_PINS; i++) {
-  pinObjects[i] = createPin();
+var offerObjects = [];
+for (var i = 0; i < NO_OF_PINS; i++) {
+  var offerObject = createOffer(i);
+  offerObjects.push(offerObject);
 }
-
-/* --- второе задание в ветке модуль3-задание1 --- */
 var userDialog = document.querySelector('.map');
 userDialog.classList.remove('map--faded');
-
-/* --- Третье задание в ветке модуль3-задание1 --- */
-
+var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 /**
- * Показываем окно с параметрами мага
- */
-
-/**
- * Поиск в темплейтах по ид
- * эллемента с нужным классом
- */
-var similarPinTemplate = document.querySelector('#pin')
-    .content
-    .querySelector('.map__pin');
-
-/**
- * Клонирование волшебников
- * @param {object} pinObject -- обьект данных волшебника
+ * клонирование метки из темплэйт-а и вставка в нее свойств
+ * @param {object} pinObject -- обьект данных метки
  * @return {object} pinElement
  */
 var renderPin = function (pinObject) {
-  var pinElement = similarPinTemplate.cloneNode(true);
-
-  pinElement.querySelector('img').src = pinObject.author.avatar;
-  pinElement.querySelector('img').alt = pinObject.offer.type;
-  pinElement.querySelector('.map__pin').style = 'left:' + pinObject.location.x + 'px;top' +
-  pinObject.location.y + 'px';
-
+  if (pinObject) {
+    var pinElement = similarPinTemplate.cloneNode(true);
+    similarPinTemplate.style = 'left:' + pinObject.location.x + 'px;top:' + pinObject.location.y + 'px';
+    similarPinTemplate.querySelector('img').src = pinObject.author.avatar;
+    similarPinTemplate.querySelector('img').alt = pinObject.offer.type;
+  }
   return pinElement;
 };
 
 var similarListElement = userDialog.querySelector('.map__pins');
-similarListElement.appendChild(createDocumentFragment(fragment));
-
-/**
- * Процесс клонирования волшебников
- */
 var fragment = document.createDocumentFragment();
-for (var j = 0; j < pinObjects.length; j++) {
-  fragment.appendChild(renderPin(pinObjects[i]));
+for (var j = 0; j < offerObjects.length; j++) {
+  var element = renderPin(offerObjects[j]);
+  fragment.appendChild(element);
 }
 similarListElement.appendChild(fragment);
-/*
-var fragment = document.createDocumentFragment();
-pinObjects.forEach(function (pin) {
-  fragment.appendChild(renderPin(pin));
-});*/
-/*
-*/
-
-/* Четвертое задание в ветке модуль3-задание1*/
