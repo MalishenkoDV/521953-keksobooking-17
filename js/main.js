@@ -31,6 +31,7 @@ var getRandomElementFromArray = function (arr) {
   return arr[getRandomFromInterval(0, arr.length - 1)];
 };
 
+var disablingForm = document.querySelectorAll()
 /**
  * Генерация свойств для "Флажка" (createOffer)
  * @param {number} i - берем число из переменной, и на его основе запускаем счетчик
@@ -63,7 +64,6 @@ for (var i = 0; i < NO_OF_PINS; i++) {
   offerObjects.push(offerObject);
 }
 var userDialog = document.querySelector('.map');
-userDialog.classList.remove('map--faded');
 var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 /**
@@ -88,3 +88,7 @@ for (var j = 0; j < offerObjects.length; j++) {
   fragment.appendChild(element);
 }
 similarListElement.appendChild(fragment);
+
+document.addEventListener('click', function () {
+  userDialog.classList.remove('map--faded');
+});
