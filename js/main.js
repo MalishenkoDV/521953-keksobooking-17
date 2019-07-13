@@ -1,94 +1,115 @@
 'use strict';
+(function () {
 
-/* Первое задание в ветке модуль3-задание1*/
-var NO_OF_PINS = 8;
+  // var HEIGHT_MAIN_PIN = 86;
 
-var TYPES = ['place', 'flat', 'house', 'bungalo'];
+  /**
+   * Генерация свойств для "Флажка" (createOffer)
+   * @param {number} i - берем число из переменной, и на его основе запускаем счетчик
+   * @param {string} avatar - маленькое фото профиля автора объявления
+   * @param {Object} offer - рента чего-то
+   * @param {Object} Location - диапазон координат "пометки" по осям X и Y
+   * @return {Array} pinObject - готовые данные для объекта "Флажок"
+   */
+  var createOffer = function (i) {
+    var offerCard = {
+      author: {
+        avatar: 'img/avatars/user0' + i + '.png'
+      },
 
-var Coords = {
-  X_MIN: 0,
-  X_MAX: 1200,
-  Y_MIN: 130,
-  Y_MAX: 630
-};
+      offer: {
+        type: window.formula.getRandomElementFromArray(window.vars.TYPES)
+      },
 
-/**
- * Функция по произвольной выборке числа из интервала
- * @param {number} min - указывает начало диапазона
- * @param {number} max - указывает конец диапазона
- * @return {*} - переводит диапазон в начальную и конечную точки и возвращает произвольный результат.
- */
-var getRandomFromInterval = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-/**
- * Случайное значение из массива.
- * @param {Array} arr - произвольный масив
- * @return {*} - элемент масива
- */
-var getRandomElementFromArray = function (arr) {
-  return arr[getRandomFromInterval(0, arr.length - 1)];
-};
-
-var disablingForm = document.querySelectorAll()
-/**
- * Генерация свойств для "Флажка" (createOffer)
- * @param {number} i - берем число из переменной, и на его основе запускаем счетчик
- * @param {string} avatar - маленькое фото профиля автора объявления
- * @param {Object} offer - рента чего-то
- * @param {Object} Location - диапазон координат "пометки" по осям X и Y
- * @return {Array} pinObject - готовые данные для объекта "Флажок"
- */
-var createOffer = function () {
-  var offerCard = {
-    author: {
-      avatar: 'img/avatars/user0' + i + '.png'
-    },
-
-    offer: {
-      type: getRandomElementFromArray(TYPES)
-    },
-
-    location: {
-      x: getRandomFromInterval(Coords.X_MIN, Coords.X_MAX),
-      y: getRandomFromInterval(Coords.Y_MIN, Coords.Y_MAX)
-    }
+      location: {
+        x: window.formula.getRandomFromInterval(window.vars.Coords.X_MIN, window.vars.Coords.X_MAX),
+        y: window.formula.getRandomFromInterval(window.vars.Coords.Y_MIN, window.vars.Coords.Y_MAX)
+      }
+    };
+    return offerCard;
   };
-  return offerCard;
-};
 
-var offerObjects = [];
-for (var i = 0; i < NO_OF_PINS; i++) {
-  var offerObject = createOffer(i);
-  offerObjects.push(offerObject);
-}
-var userDialog = document.querySelector('.map');
-var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
-/**
- * клонирование метки из темплэйт-а и вставка в нее свойств
- * @param {object} pinObject -- обьект данных метки
- * @return {object} pinElement
- */
-var renderPin = function (pinObject) {
-  if (pinObject) {
-    var pinElement = similarPinTemplate.cloneNode(true);
-    similarPinTemplate.style = 'left:' + pinObject.location.x + 'px;top:' + pinObject.location.y + 'px';
-    similarPinTemplate.querySelector('img').src = pinObject.author.avatar;
-    similarPinTemplate.querySelector('img').alt = pinObject.offer.type;
+  for (var i = 1; i <= window.vars.NO_OF_PINS; i++) {
+    var offerObject = createOffer(i);
+    window.vars.offerObjects.push(offerObject);
   }
-  return pinElement;
-};
 
-var similarListElement = userDialog.querySelector('.map__pins');
-var fragment = document.createDocumentFragment();
-for (var j = 0; j < offerObjects.length; j++) {
-  var element = renderPin(offerObjects[j]);
-  fragment.appendChild(element);
-}
-similarListElement.appendChild(fragment);
+  /**
+   * клонирование метки из темплэйт-а и вставка в нее свойств
+   * @param {object} pinObject -- обьект данных метки
+   * @return {object} pinElement
+   */
+  var renderPin = function (pinObject) {
+    if (pinObject) {
+      var pinElement = window.vars.similarPinTemplate.cloneNode(true);
+      window.vars.similarPinTemplate.style = 'left:' + pinObject.location.x + 'px;top:' + pinObject.location.y + 'px';
+      window.vars.similarPinTemplate.querySelector('img').src = pinObject.author.avatar;
+      window.vars.similarPinTemplate.querySelector('img').alt = pinObject.offer.type;
+    }
+    return pinElement;
+  };
 
-document.addEventListener('click', function () {
-  userDialog.classList.remove('map--faded');
-});
+  /**
+   * Функция отрисовки пинов на карте
+   * ПО offerObjects проходимся методом forEach,
+   * а после - вставляем значения пинов в фрагмент
+   */
+  var paintPin = function () {
+    var fragment = document.createDocumentFragment();
+    window.vars.offerObjects.forEach(function (offer) {
+      var element = renderPin(offer);
+      fragment.appendChild(element);
+    });
+    window.vars.similarListElement.appendChild(fragment);
+  };
+
+  /**
+   * Передача значений коородинат главного пина в аддресную строку
+   * @param {number} x - координата по горизонтали
+   * @param {number} y - координата по вертикали
+   */
+  var setAddress = function (x, y) {
+    window.vars.form.querySelector('#address').value = x + ',' + y;
+  };
+
+  /**
+   * отключение возможности ввода данных полей формы
+   */
+  var deactivateMap = function () {
+    var deactivateForm = function () {
+      window.vars.fieldsetList.forEach(function (fieldset) {
+        fieldset.disabled = true;
+      });
+      window.vars.mapFilterSelect.forEach(function (element) {
+        element.disabled = true;
+      });
+    };
+    window.vars.userDialog.classList.add('map--faded');
+    window.vars.form.classList.add('ad-form--disabled');
+    deactivateForm();
+    window.vars.mapFilter.classList.add('.ad-form--disabled');
+  };
+  deactivateMap();
+  var activateForm = function () {
+    window.vars.userDialog.classList.remove('map--faded');
+    window.vars.form.classList.remove('ad-form--disabled');
+    window.vars.mapFilter.classList.remove('ad-form--disabled');
+    window.vars.mapFilterSelect.forEach(function (element) {
+      element.disabled = false;
+    });
+    window.vars.fieldsetList.forEach(function (fieldset) {
+      fieldset.disabled = false;
+    });
+  };
+
+  var activateMap = function () {
+    activateForm();
+    paintPin();
+    setAddress(window.vars.Coords.x, window.vars.Coords.y);
+    window.vars.pinMain.removeEventListener('mouseup', activateMap);
+  };
+  window.vars.pinMain.addEventListener('mouseup', activateMap);
+  window.main = {
+    activateMap: activateMap
+  };
+})();
