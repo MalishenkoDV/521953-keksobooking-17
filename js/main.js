@@ -60,7 +60,7 @@
       var element = renderPin(offer);
       fragment.appendChild(element);
     });
-    window.vars.similarListElement.appendChild(fragment);
+    window.vars.pinListElement.appendChild(fragment);
   };
 
   /**

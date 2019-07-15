@@ -2,7 +2,7 @@
 
 (function () {
   var NO_OF_PINS = 8;
-  var TYPES = ['place', 'flat', 'house', 'bungalo'];
+  var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var Coords = {
     X_MIN: 0,
     X_MAX: 1200,
@@ -13,11 +13,13 @@
   };
   var offerObjects = [];
   var userDialog = document.querySelector('.map');
-  var similarListElement = userDialog.querySelector('.map__pins');
+  var pinListElement = userDialog.querySelector('.map__pins');
+  var pinMain = userDialog.querySelector('.map__pin--main');
+
   var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var fieldsetList = document.querySelectorAll('fieldset');
-  var pinMain = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
+
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterSelect = mapFilter.querySelectorAll('select');
 
@@ -29,7 +31,7 @@
     offerObjects: offerObjects,
     userDialog: userDialog,
     similarPinTemplate: similarPinTemplate,
-    similarListElement: similarListElement,
+    pinListElement: pinListElement,
     fieldsetList: fieldsetList,
     pinMain: pinMain,
     form: form,
