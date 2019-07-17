@@ -36,6 +36,6 @@
     pinMain: pinMain,
     form: form,
     mapFilter: mapFilter,
-    mapFilterSelect: mapFilterSelect,
+    mapFilterSelect: mapFilterSelect
   };
 })();

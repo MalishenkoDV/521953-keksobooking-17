@@ -75,15 +75,16 @@
   /**
    * отключение возможности ввода данных полей формы
    */
+
+  var deactivateForm = function () {
+    window.vars.fieldsetList.forEach(function (fieldset) {
+      fieldset.disabled = true;
+    });
+    window.vars.mapFilterSelect.forEach(function (element) {
+      element.disabled = true;
+    });
+  };
   var deactivateMap = function () {
-    var deactivateForm = function () {
-      window.vars.fieldsetList.forEach(function (fieldset) {
-        fieldset.disabled = true;
-      });
-      window.vars.mapFilterSelect.forEach(function (element) {
-        element.disabled = true;
-      });
-    };
     window.vars.userDialog.classList.add('map--faded');
     window.vars.form.classList.add('ad-form--disabled');
     deactivateForm();
