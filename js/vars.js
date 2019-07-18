@@ -2,14 +2,16 @@
 
 (function () {
   var NO_OF_PINS = 8;
+  var HEIGHT_MAIN_PIN = 86;
+  var WIDTH_MAIN_PIN = 42;
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-  var Coords = {
+  var BaseCoords = {
     X_MIN: 0,
     X_MAX: 1200,
     Y_MIN: 130,
     Y_MAX: 630,
-    x: 600,
-    y: 315
+    x: 600 + WIDTH_MAIN_PIN / 2,
+    y: 315 + HEIGHT_MAIN_PIN
   };
   var offerObjects = [];
   var userDialog = document.querySelector('.map');
@@ -27,7 +29,7 @@
   window.vars = {
     NO_OF_PINS: NO_OF_PINS,
     TYPES: TYPES,
-    Coords: Coords,
+    BaseCoords: BaseCoords,
     offerObjects: offerObjects,
     userDialog: userDialog,
     similarPinTemplate: similarPinTemplate,

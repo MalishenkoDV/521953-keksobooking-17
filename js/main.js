@@ -1,7 +1,6 @@
 'use strict';
 (function () {
 
-  // var HEIGHT_MAIN_PIN = 86;
 
   /**
    * Генерация свойств для "Флажка" (createOffer)
@@ -106,11 +105,10 @@
   var activateMap = function () {
     activateForm();
     paintPin();
-    setAddress(window.vars.Coords.x, window.vars.Coords.y);
-    window.vars.pinMain.removeEventListener('mouseup', activateMap);
+    setAddress(window.vars.BaseCoords.x, window.vars.BaseCoords.y);
   };
-  window.vars.pinMain.addEventListener('mouseup', activateMap);
   window.main = {
-    activateMap: activateMap
+    activateMap: activateMap,
+    setAddress: setAddress
   };
 })();
