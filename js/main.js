@@ -1,7 +1,6 @@
 'use strict';
 (function () {
 
-  // var HEIGHT_MAIN_PIN = 86;
 
   /**
    * Генерация свойств для "Флажка" (createOffer)
@@ -60,7 +59,7 @@
       var element = renderPin(offer);
       fragment.appendChild(element);
     });
-    window.vars.similarListElement.appendChild(fragment);
+    window.vars.pinListElement.appendChild(fragment);
   };
 
   /**
@@ -75,15 +74,16 @@
   /**
    * отключение возможности ввода данных полей формы
    */
+
+  var deactivateForm = function () {
+    window.vars.fieldsetList.forEach(function (fieldset) {
+      fieldset.disabled = true;
+    });
+    window.vars.mapFilterSelect.forEach(function (element) {
+      element.disabled = true;
+    });
+  };
   var deactivateMap = function () {
-    var deactivateForm = function () {
-      window.vars.fieldsetList.forEach(function (fieldset) {
-        fieldset.disabled = true;
-      });
-      window.vars.mapFilterSelect.forEach(function (element) {
-        element.disabled = true;
-      });
-    };
     window.vars.userDialog.classList.add('map--faded');
     window.vars.form.classList.add('ad-form--disabled');
     deactivateForm();
@@ -105,11 +105,10 @@
   var activateMap = function () {
     activateForm();
     paintPin();
-    setAddress(window.vars.Coords.x, window.vars.Coords.y);
-    window.vars.pinMain.removeEventListener('mouseup', activateMap);
+    setAddress(window.vars.BaseCoords.x, window.vars.BaseCoords.y);
   };
-  window.vars.pinMain.addEventListener('mouseup', activateMap);
   window.main = {
-    activateMap: activateMap
+    activateMap: activateMap,
+    setAddress: setAddress
   };
 })();
