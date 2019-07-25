@@ -1,6 +1,6 @@
 'use strict';
-(function () {
 
+(function () {
 
   /**
    * Генерация свойств для "Флажка" (createOffer)
@@ -21,8 +21,8 @@
       },
 
       location: {
-        x: window.formula.getRandomFromInterval(window.vars.Coords.X_MIN, window.vars.Coords.X_MAX),
-        y: window.formula.getRandomFromInterval(window.vars.Coords.Y_MIN, window.vars.Coords.Y_MAX)
+        x: window.formula.getRandomFromInterval(window.vars.BaseCoords.X_MIN, window.vars.BaseCoords.X_MAX),
+        y: window.formula.getRandomFromInterval(window.vars.BaseCoords.Y_MIN, window.vars.BaseCoords.Y_MAX)
       }
     };
     return offerCard;
@@ -107,7 +107,7 @@
     paintPin();
     setAddress(window.vars.BaseCoords.x, window.vars.BaseCoords.y);
   };
-  window.main = {
+  window.core = {
     activateMap: activateMap,
     setAddress: setAddress
   };

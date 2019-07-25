@@ -5,7 +5,7 @@
   // var pinMain = userDialog.querySelector('.map__pin--main');
 
   window.vars.pinMain.addEventListener('mousedown', function (evt) {
-    window.main.activateMap();
+    window.core.activateMap();
 
     var startCoords = {
       x: evt.clientX,
@@ -29,11 +29,11 @@
         x: window.vars.pinMain.style.top = (window.vars.pinMain.offsetTop - shift.y) + 'px',
         y: window.vars.pinMain.style.left = (window.vars.pinMain.offsetLeft - shift.x) + 'px'
       };
-      window.main.setAddress(presentTimeCoords.x, presentTimeCoords.y);
+      window.core.setAddress(presentTimeCoords.x, presentTimeCoords.y);
     };
 
     var onMouseUp = function () {
-      window.main.setAddress(window.vars.BaseCoords.x, window.vars.BaseCoords.y);
+      window.core.setAddress(window.vars.BaseCoords.X_INIT, window.vars.BaseCoords.Y_INIT);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
