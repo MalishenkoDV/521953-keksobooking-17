@@ -2,36 +2,36 @@
 
 (function () {
 
-  /**
-   * Генерация свойств для "Флажка" (createOffer)
-   * @param {number} i - берем число из переменной, и на его основе запускаем счетчик
-   * @param {string} avatar - маленькое фото профиля автора объявления
-   * @param {Object} offer - рента чего-то
-   * @param {Object} Location - диапазон координат "пометки" по осям X и Y
-   * @return {Array} pinObject - готовые данные для объекта "Флажок"
-   */
-  var createOffer = function (i) {
-    var offerCard = {
-      author: {
-        avatar: 'img/avatars/user0' + i + '.png'
-      },
+  // /**
+  //  * Генерация свойств для "Флажка" (createOffer)
+  //  * @param {number} i - берем число из переменной, и на его основе запускаем счетчик
+  //  * @param {string} avatar - маленькое фото профиля автора объявления
+  //  * @param {Object} offer - рента чего-то
+  //  * @param {Object} Location - диапазон координат "пометки" по осям X и Y
+  //  * @return {Array} pinObject - готовые данные для объекта "Флажок"
+  //  */
+  // var createOffer = function (i) {
+  //   var offerCard = {
+  //     author: {
+  //       avatar: 'img/avatars/user0' + i + '.png'
+  //     },
 
-      offer: {
-        type: window.formula.getRandomElementFromArray(window.vars.TYPES)
-      },
+  //     offer: {
+  //       type: window.formula.getRandomElementFromArray(window.vars.TYPES)
+  //     },
 
-      location: {
-        x: window.formula.getRandomFromInterval(window.vars.BaseCoords.X_MIN, window.vars.BaseCoords.X_MAX),
-        y: window.formula.getRandomFromInterval(window.vars.BaseCoords.Y_MIN, window.vars.BaseCoords.Y_MAX)
-      }
-    };
-    return offerCard;
-  };
+  //     location: {
+  //       x: window.formula.getRandomFromInterval(window.vars.BaseCoords.X_MIN, window.vars.BaseCoords.X_MAX),
+  //       y: window.formula.getRandomFromInterval(window.vars.BaseCoords.Y_MIN, window.vars.BaseCoords.Y_MAX)
+  //     }
+  //   };
+  //   return offerCard;
+  // };
 
-  for (var i = 1; i <= window.vars.NO_OF_PINS; i++) {
-    var offerObject = createOffer(i);
-    window.vars.offerObjects.push(offerObject);
-  }
+  // for (var i = 1; i <= window.vars.NO_OF_PINS; i++) {
+  //   var offerObject = createOffer(i);
+  //   window.vars.offerObjects.push(offerObject);
+  // }
 
   /**
    * клонирование метки из темплэйт-а и вставка в нее свойств
@@ -52,10 +52,11 @@
    * Функция отрисовки пинов на карте
    * ПО offerObjects проходимся методом forEach,
    * а после - вставляем значения пинов в фрагмент
+   * @param {Array} offerObjects - массив объявлений загруженных по сети
    */
-  var paintPin = function () {
+  var paintPin = function (offerObjects) {
     var fragment = document.createDocumentFragment();
-    window.vars.offerObjects.forEach(function (offer) {
+    offerObjects.forEach(function (offer) {
       var element = renderPin(offer);
       fragment.appendChild(element);
     });
@@ -70,7 +71,7 @@
   var setAddress = function (x, y) {
     window.vars.form.querySelector('#address').value = x + ',' + y;
   };
-
+  var mapActive = false;
   /**
    * отключение возможности ввода данных полей формы
    */
@@ -84,6 +85,7 @@
     });
   };
   var deactivateMap = function () {
+    mapActive = false;
     window.vars.userDialog.classList.add('map--faded');
     window.vars.form.classList.add('ad-form--disabled');
     deactivateForm();
@@ -102,13 +104,31 @@
     });
   };
 
+  var onLoad = function () {
+    vars timeOffers = data;
+  };
+
   var activateMap = function () {
+    mapActive = true;
     activateForm();
     paintPin();
+    window.backend.load(onLoad, window.popup.onError);
     setAddress(window.vars.BaseCoords.x, window.vars.BaseCoords.y);
   };
+  // /**
+  //  *  Делаем загрузку из сети
+  //  */
+  // var onError = function (message) {
+  //   console.error(message);
+  // };
+
+  // var onSuccess = function (data) {
+  //   console.log(data);
+  // };
+
   window.core = {
     activateMap: activateMap,
-    setAddress: setAddress
+    setAddress: setAddress,
+    isActive: mapActive
   };
 })();
