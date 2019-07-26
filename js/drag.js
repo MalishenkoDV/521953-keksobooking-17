@@ -5,7 +5,9 @@
   // var pinMain = userDialog.querySelector('.map__pin--main');
 
   window.vars.pinMain.addEventListener('mousedown', function (evt) {
-    window.core.activateMap();
+    if (!window.core.isActive) {
+      window.core.activateMap();
+    }
 
     var startCoords = {
       x: evt.clientX,
