@@ -10,8 +10,8 @@
     X_MAX: 1200,
     Y_MIN: 130,
     Y_MAX: 630,
-    x: 600 + WIDTH_MAIN_PIN / 2,
-    y: 315 + HEIGHT_MAIN_PIN
+    X_INIT: 600 + WIDTH_MAIN_PIN / 2,
+    Y_INIT: 315 + HEIGHT_MAIN_PIN
   };
   var offerObjects = [];
   var userDialog = document.querySelector('.map');
